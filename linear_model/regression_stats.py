@@ -18,6 +18,7 @@ class RegressionStats(ModelStats):
     def __init__(self, fitted_model, X, y, colnames = None):
         ModelStats.__init__(self, fitted_model, X, y, colnames)
         self.n = len(y)
+        self.k = X.shape[1] # num dependent variables
         
     def get_betas(self):
         coef_intercept = self.fitted_model.intercept_
@@ -28,23 +29,29 @@ class RegressionStats(ModelStats):
         X = np.array(X)
         n = X.shape[0]
         return np.c_[np.ones(n), X] 
-        
-    def compute_s2(self, X):
-        y = self.y
-        betas = self.get_betas()
-        # y'y - beta'X'y
-        RSS =  (y.T.dot(y) - betas.T.dot(X.T).dot(y))
-        k = len(betas) - 1 # number of dependent variables
-        return RSS/(self.n - k - 1)
-            
     
     def compute_standard_errors(self):
-        X = self.add_constant(self.X)
-        k = X.shape[1]
-        s2 = self.compute_s2(X)
-        # covariance matrix of betas (coefficients)
-        sigma = np.linalg.solve(X.T.dot(X), np.eye(k)*s2)
-        return np.sqrt(np.diagonal(sigma))
+        '''
+        We compute the standard errors the same way that 
+        statsmodels does when cov_type is nonrobust
+        
+        Method: 
+        From the residuals 'resid', compute the estimation of 
+        sigma^2 (s^2) = RSS/n-k-1 = (resid^t resid)/ n - k - 1 which 
+            scales the X deviation term (X'X)^-1
+        Then compute the covariance matrix of coefficients, cov_mat:
+            using equation cov(beta_hat) = s^2 * (X'X)^-1
+        The standard errors of coefficients are the sqrt of
+            diagonal entries in the covariance matrix
+        
+        '''
+        # add constant column to X design matrix
+        X_const = self.add_constant(self.X)
+        resid = np.array(self.y - self.fitted_model.predict(self.X))
+        s2 = resid.T.dot(resid)/(self.n - self.k - 1)
+        cov_mat = s2 * np.linalg.inv(X_const.T.dot(X_const))
+        se = np.sqrt(np.diag(cov_mat))
+        return se
             
     
     def compute_t_stats(self):

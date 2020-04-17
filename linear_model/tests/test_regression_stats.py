@@ -1,7 +1,8 @@
 from linear_model import RegressionStats
-from numpy.testing import assert_equal
+from numpy.testing import assert_equal, assert_allclose
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.linear_model import LinearRegression
 
 df = pd.read_csv('data/Boston.csv', index_col = 0)
@@ -16,7 +17,9 @@ list_X = [1,3,4]
 lr_model = LinearRegression()
 lr_model.fit(X,y)
 
+
 stats = RegressionStats(lr_model, X, y)
+
 
 def test_get_betas():
     betas = stats.get_betas()
@@ -42,7 +45,13 @@ def test_add_constant():
     assert_equal(X_constant_ls, correct_3)
     
     
-def test_compute_s2():
+def test_compute_standard_errors():
+    # can't test s2 very well as it is used just as a helper function
+    # for compute_standard_errors
+    computed_se = stats.compute_standard_errors()
+    # from statsmodels cov_params:
+    verified_se = np.array([0.09403954, 0.01008802])
+    assert_allclose(computed_se, verified_se, rtol=1e-5)
     
     
 
