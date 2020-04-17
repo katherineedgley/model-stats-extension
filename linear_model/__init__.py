@@ -1,1 +1,1 @@
-from .linear_regression import OLS_Stats
+from linear_model.regression_stats import RegressionStats
