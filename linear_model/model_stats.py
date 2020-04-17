@@ -4,7 +4,7 @@
 import numpy as np
 import pandas as pd
 
-class LinearModel:
+class ModelStats:
     def __init__(self, fitted_model, X, y, colnames = None):
         
         self.fitted_model = fitted_model

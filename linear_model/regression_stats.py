@@ -5,7 +5,7 @@
 import numpy as np
 import pandas as pd
 from scipy import stats
-from .model import LinearModel
+from .model_stats import ModelStats
 
 """
 Created on Wed Apr 15 16:38:20 2020
@@ -13,10 +13,10 @@ Created on Wed Apr 15 16:38:20 2020
 @author: redgley
 """
 
-class OLS_Stats(LinearModel):
+class RegressionStats(ModelStats):
     
     def __init__(self, fitted_model, X, y, colnames = None):
-        LinearModel.__init__(self, fitted_model, X, y, colnames)
+        ModelStats.__init__(self, fitted_model, X, y, colnames)
         self.n = len(y)
         
     def get_betas(self):
@@ -25,7 +25,9 @@ class OLS_Stats(LinearModel):
         return np.append(coef_intercept, coefs)
     
     def add_constant(self, X):
-        return np.c_[np.ones(self.n), X] 
+        X = np.array(X)
+        n = X.shape[0]
+        return np.c_[np.ones(n), X] 
         
     def compute_s2(self, X):
         y = self.y
