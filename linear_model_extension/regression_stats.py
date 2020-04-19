@@ -66,19 +66,20 @@ class RegressionStats(ModelStats):
         df  = self.n - 2
         return stats.t.sf(np.abs(t_stat), df)*2
     
-    def conf_int(self, beta, se):
+    def compute_conf_int(self, beta, se):
         t_conf = stats.t.ppf(.975, self.n)
         lower = beta - t_conf*se
         upper = beta + t_conf*se
         return lower, upper
     
-    def get_summary(self):
+    def summary(self):
         betas = self.get_betas()
         # standard error list
         errors = list(self.compute_standard_errors())
         t_stat_ls = list(self.compute_t_stats())
         pvals = [self.compute_pval(t_stat) for t_stat in t_stat_ls]
-        conf_int_ls = [self.conf_int(beta, se) for beta,se in zip(betas,errors)]
+        conf_int_ls = [self.compute_conf_int(beta, se) 
+                       for beta,se in zip(betas,errors)]
         lower_conf_ls = [lower for lower, upper in conf_int_ls]
         upper_conf_ls = [upper for lower, upper in conf_int_ls]
         
