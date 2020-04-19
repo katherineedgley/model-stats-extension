@@ -48,6 +48,7 @@ lr_model.fit(X,y)
 stats = RegressionStats() 
 stats.summary(lr_model, X, y)
 ```
+This will return the following output:
 
 
 |           | coef      | std err  | t         | p-value       | \[0.025   | 0.975\]     |
