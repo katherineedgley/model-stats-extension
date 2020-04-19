@@ -40,19 +40,19 @@ RegressionStats is the working module which can be applied to an scikit-learn Li
 To run, must have a **fitted** scikit-learn LinearRegression() object as well as an X and y object 
 (Pandas dataframe or numpy array) e.g.:
 
-`from sklearn.linear_model import LinearRegression \
-from linear_model_extension import RegressionStats \
-lr_model = LinearRegression() \
-lr_model.fit(X,y) \
-stats = RegressionStats() \
+`from sklearn.linear_model import LinearRegression 
+from linear_model_extension import RegressionStats 
+lr_model = LinearRegression() 
+lr_model.fit(X,y) 
+stats = RegressionStats() 
 stats.summary(lr_model, X, y)`
 
 This will produce the following kind of output:
 
            |    coef  | std err    |      t      |    P>\|t\|  |  [0.025  |  0.975]
-  ---      | --- | --- | --- | --- | --- | --- 
-Intercept | 4.130904 | 0.094040 | 43.927304 | 1.896759e-174 | 3.946148 | 4.315660
-crim     | -0.092946 | 0.010088 | -9.213458 | 8.519949e-19 | -0.112765 | -0.073126 
+                       ---      | --- | --- | --- | --- | --- | --- 
+           Intercept | 4.130904 | 0.094040 | 43.927304 | 1.896759e-174 | 3.946148 | 4.315660
+           crim     | -0.092946 | 0.010088 | -9.213458 | 8.519949e-19 | -0.112765 | -0.073126 
 
 
 ## Notes on Statistics
