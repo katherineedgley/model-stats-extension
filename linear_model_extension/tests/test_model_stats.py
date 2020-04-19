@@ -1,4 +1,4 @@
-from linear_model import RegressionStats
+from linear_model_extension import RegressionStats
 from numpy.testing import assert_equal, assert_allclose
 import numpy as np
 import pandas as pd
